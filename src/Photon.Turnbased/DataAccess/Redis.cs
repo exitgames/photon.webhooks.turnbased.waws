@@ -9,8 +9,8 @@ namespace Photon.Webhooks.Turnbased.DataAccess
     using System.Collections.Generic;
     using ServiceStack.Redis;
     using ServiceStack.Text;
-    
-    public class Redis
+
+    public class Redis : IDataAccess
     {
         public static bool Exists(string key)
         {   
@@ -83,6 +83,41 @@ namespace Photon.Webhooks.Turnbased.DataAccess
             {
                 redisClient.FlushAll();
             }
+        }
+
+        public bool StateExists(string appId, string key)
+        {
+            return Exists(string.Format("{0}_{1}", appId, key));
+        }
+
+        public void StateSet(string appId, string key, string state)
+        {
+            Set(string.Format("{0}_{1}", appId, key), state);
+        }
+
+        public string StateGet(string appId, string key)
+        {
+            return Get(string.Format("{0}_{1}", appId, key));
+        }
+
+        public void StateDelete(string appId, string key)
+        {
+            Delete(string.Format("{0}_{1}", appId, key));
+        }
+
+        public void GameInsert(string appId, string key, string gameId, int actorNr)
+        {
+            HashSet(string.Format("{0}_{1}", appId, key), gameId, actorNr.ToString());
+        }
+
+        public void GameDelete(string appId, string key, string gameId)
+        {
+            HashDelete(string.Format("{0}_{1}", appId, key), gameId);
+        }
+
+        public Dictionary<string, string> GameGetAll(string appId, string key)
+        {
+            return HashGetAll(string.Format("{0}_{1}", appId, key));
         }
     }
 }

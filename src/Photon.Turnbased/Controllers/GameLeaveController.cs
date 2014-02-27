@@ -9,7 +9,6 @@ namespace Photon.Webhooks.Turnbased.Controllers
     using System.Web.Http;
 
     using Models;
-    using DataAccess;
 
     public class GameLeaveController : ApiController
     {
@@ -27,12 +26,12 @@ namespace Photon.Webhooks.Turnbased.Controllers
             {
                 if (request.ActorNr > 0)
                 {
-                    Redis.HashSet(string.Format("{0}_{1}", appId, request.UserId), request.GameId, request.ActorNr.ToString());
+                    WebApiApplication.DataAccess.GameInsert(appId, request.UserId, request.GameId, request.ActorNr);
                 }
             }
             else
             {
-                Redis.HashDelete(string.Format("{0}_{1}", appId, request.UserId), request.GameId);
+                WebApiApplication.DataAccess.GameDelete(appId, request.UserId, request.GameId);
             }
 
             return new OkResponse();

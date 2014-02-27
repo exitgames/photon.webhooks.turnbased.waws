@@ -11,7 +11,6 @@ namespace Photon.Webhooks.Turnbased.Controllers
     using Newtonsoft.Json;
 
     using Models;
-    using DataAccess;
 
     public class GameCloseController : ApiController
     {
@@ -32,7 +31,7 @@ namespace Photon.Webhooks.Turnbased.Controllers
                     return new ErrorResponse { Message = "Missing State." };
                 }
 
-                Redis.Delete(string.Format("{0}_{1}", appId, request.GameId));
+                WebApiApplication.DataAccess.StateDelete(appId, request.GameId);
 
                 return new OkResponse();
             }
@@ -41,11 +40,11 @@ namespace Photon.Webhooks.Turnbased.Controllers
             {
                 foreach (var actor in request.State2.ActorList)
                 {
-                    Redis.HashSet(string.Format("{0}_{1}", appId, actor.UserId), request.GameId, (string)actor.ActorNr);
+                    WebApiApplication.DataAccess.GameInsert(appId, (string)actor.UserId, request.GameId, (int)actor.ActorNr);
                 }
             }
 
-            Redis.Set(string.Format("{0}_{1}", appId, request.GameId), (string)JsonConvert.SerializeObject(request.State));
+            WebApiApplication.DataAccess.StateSet(appId, request.GameId, (string)JsonConvert.SerializeObject(request.State));
 
             return new OkResponse();
         }

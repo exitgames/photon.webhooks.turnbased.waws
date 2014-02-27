@@ -11,7 +11,6 @@ namespace Photon.Webhooks.Turnbased.Controllers
     using Newtonsoft.Json;
 
     using Models;
-    using DataAccess;
 
     public class GameLoadController : ApiController
     {
@@ -25,7 +24,7 @@ namespace Photon.Webhooks.Turnbased.Controllers
                 return new ErrorResponse { Message = message };
             }
 
-            var stateJson = Redis.Get(string.Format("{0}_{1}", appId, request.GameId));
+            var stateJson = WebApiApplication.DataAccess.StateGet(appId, request.GameId);
 
             if (!string.IsNullOrEmpty(stateJson))
             {

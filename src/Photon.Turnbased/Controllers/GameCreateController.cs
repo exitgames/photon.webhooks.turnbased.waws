@@ -9,8 +9,6 @@ namespace Photon.Webhooks.Turnbased.Controllers
     using System.Web.Http;
 
     using Models;
-    using DataAccess;
-
 
     public class GameCreateController : ApiController
     {
@@ -24,12 +22,12 @@ namespace Photon.Webhooks.Turnbased.Controllers
                 return new ErrorResponse { Message = message };
             }
 
-            if (Redis.Exists(string.Format("{0}_{1}", appId, request.GameId)))
+            if (WebApiApplication.DataAccess.StateExists(appId, request.GameId))
             {
                 return new ErrorResponse { Message = "Game already exists." };
             }
 
-            Redis.Set(string.Format("{0}_{1}", appId, request.GameId), string.Empty);
+            WebApiApplication.DataAccess.StateSet(appId, request.GameId, string.Empty);
 
             return new OkResponse();
         }

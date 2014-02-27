@@ -10,7 +10,6 @@ namespace Photon.Webhooks.Turnbased.Controllers
     using System.Web.Http;
 
     using Models;
-    using DataAccess;
 
     public class GetGameListController : ApiController
     {
@@ -26,19 +25,20 @@ namespace Photon.Webhooks.Turnbased.Controllers
 
             var list = new Dictionary<string, string>();
 
-            foreach (var pair in Redis.HashGetAll(string.Format("{0}_{1}", appId, request.UserId)))
+            foreach (var pair in WebApiApplication.DataAccess.GameGetAll(appId, request.UserId))
             {
                 // exists - save result in list
-                if (Redis.Exists(string.Format("{0}_{1}", appId, pair.Key)))
+                if (WebApiApplication.DataAccess.StateExists(appId, pair.Key))
                 {
                     list.Add(pair.Key, pair.Value);
                 }
                 // not exists - delete
                 else
                 {
-                    Redis.HashDelete(string.Format("{0}_{1}", appId, request.UserId), pair.Key);
+                    WebApiApplication.DataAccess.GameDelete(appId, request.UserId, pair.Key);
                 }
             }
+           
 
             return new GetGameListResponse { Data = list };
         }
