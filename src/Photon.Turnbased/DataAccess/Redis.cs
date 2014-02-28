@@ -77,14 +77,6 @@ namespace Photon.Webhooks.Turnbased.DataAccess
             }
         }
 
-        public static void FlushAll()
-        {
-            using (var redisClient = (RedisNativeClient)WebApiApplication.PooledRedisClientManager.GetClient())
-            {
-                redisClient.FlushAll();
-            }
-        }
-
         public bool StateExists(string appId, string key)
         {
             return Exists(string.Format("{0}_{1}", appId, key));

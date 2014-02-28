@@ -9,10 +9,17 @@ namespace Photon.Webhooks.Turnbased.DataAccess
     using System.Collections.Generic;
     using System.Configuration;
     using System.IO;
+    using System.Linq;
+
     using Amazon.S3.Model;
+    using Amazon.DynamoDBv2.Model;
     
     public class AmazonDataAccess : IDataAccess
     {
+        private const string HashKey = "UserId";
+        private const string RangeKey = "GameId";
+        private const string ActorNr = "ActorNr";
+
         public bool StateExists(string appId, string key)
         {
             var listObjectsRequest = new ListObjectsRequest
@@ -68,19 +75,59 @@ namespace Photon.Webhooks.Turnbased.DataAccess
 
         public void GameInsert(string appId, string key, string gameId, int actorNr)
         {
-            //Will be implemented with DynamoDB
+            WebApiApplication.AmazonDynamoDBClient.PutItem(
+                new PutItemRequest
+                {
+                    TableName = ConfigurationManager.AppSettings["TableName"],
+                    Item = new Dictionary<string, AttributeValue>
+                    {
+                        {HashKey, new AttributeValue { S = string.Format("{0}_{1}", appId, key) } },
+                        {RangeKey, new AttributeValue { S = gameId } },
+                        {ActorNr, new AttributeValue { N = actorNr.ToString() } },
+                    },
+                }
+            );
         }
 
         public void GameDelete(string appId, string key, string gameId)
         {
-            //Will be implemented with DynamoDB        
+            WebApiApplication.AmazonDynamoDBClient.DeleteItem(
+                new DeleteItemRequest
+                {
+                    TableName = ConfigurationManager.AppSettings["TableName"],
+                    Key = new Dictionary<string, AttributeValue>
+                    {
+                        {HashKey, new AttributeValue { S = string.Format("{0}_{1}", appId, key) } },
+                        {RangeKey, new AttributeValue { S = gameId } },
+                    },
+                }
+            );
         }
 
         public Dictionary<string, string> GameGetAll(string appId, string key)
         {
-            //Will be implemented with DynamoDB
-            
-            return new Dictionary<string, string>();
+            var request = new QueryRequest
+            {
+                TableName = ConfigurationManager.AppSettings["TableName"],
+                KeyConditions = new Dictionary<string, Condition>
+                {
+                    {
+                        HashKey,
+                        new Condition
+                        {
+                            ComparisonOperator = "EQ",
+                            AttributeValueList = new List<AttributeValue>()
+                            {
+                                new AttributeValue {S = string.Format("{0}_{1}", appId, key)}
+                            }
+                        }
+                    }
+                }
+            };
+
+            var response = WebApiApplication.AmazonDynamoDBClient.Query(request);
+
+            return response.Items.ToDictionary(item => item[RangeKey].S, item => item[ActorNr].N);
         }
     }
 }

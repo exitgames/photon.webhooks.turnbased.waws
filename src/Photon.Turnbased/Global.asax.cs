@@ -12,23 +12,37 @@ namespace Photon.Webhooks.Turnbased
 
     using DataAccess;
 
+    using Microsoft.WindowsAzure.Storage;
+
     using ServiceStack.Redis;
 
     using Amazon;
     using Amazon.S3;
+    using Amazon.DynamoDBv2;
 
     public class WebApiApplication : System.Web.HttpApplication
     {
         public static IDataAccess DataAccess;
 
+        public static CloudStorageAccount CloudStorageAccount;
+
+
         public static PooledRedisClientManager PooledRedisClientManager;
 
         public static AmazonS3Client AmazonS3Client;
+        // ReSharper disable once InconsistentNaming
+        public static AmazonDynamoDBClient AmazonDynamoDBClient;
 
         protected void Application_Start()
         {
             if (ConfigurationManager.AppSettings["DataAccess"].Equals("Azure", StringComparison.OrdinalIgnoreCase))
             {
+                CloudStorageAccount = CloudStorageAccount.Parse(
+                                    string.Format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}",
+                                        ConfigurationManager.AppSettings["AzureAccountName"],
+                                        ConfigurationManager.AppSettings["AzureAccountKey"])
+                                    );
+
                 DataAccess = new Azure();
             }
             else if (ConfigurationManager.AppSettings["DataAccess"].Equals("Redis", StringComparison.OrdinalIgnoreCase))
@@ -45,6 +59,8 @@ namespace Photon.Webhooks.Turnbased
             {
                 var regionEndpoint = RegionEndpoint.GetBySystemName(ConfigurationManager.AppSettings["AWSRegion"]);
                 AmazonS3Client = new AmazonS3Client(ConfigurationManager.AppSettings["AWSAccessKey"], ConfigurationManager.AppSettings["AWSSecretKey"], regionEndpoint);
+
+                AmazonDynamoDBClient = new AmazonDynamoDBClient(ConfigurationManager.AppSettings["AWSAccessKey"], ConfigurationManager.AppSettings["AWSSecretKey"]);
 
                 DataAccess = new AmazonDataAccess();
             }
