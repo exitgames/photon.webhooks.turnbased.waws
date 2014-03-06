@@ -10,16 +10,28 @@ This is the **Photon Turnbased Webhooks** sample using [Azure Websites]() and [B
 - [Photon Account for Turnbased](https://www.exitgames.com/en/Turnbased)
 - Windows with IIS (Internet Information Service) feature enabled
 - Visual Studio 2013
+- [ngrok](https://ngrok.com/) to forward requests to your PC
+
+### Option 1: Azure Storage ###
 - Azure Account: It is free (but you need to enter a Credit Card)
 - Azure Storage: Create a "STORAGE" > Quick Create (enter Name and Region)
-- [ngrok](https://ngrok.com/) to forward requests to your PC
+
+### Option 2: Redis ###
+- local [Redis](http://redis.io/download)
 
 ## How to run locally ##
 
 - Open the sample running Visual Studio as administrator and build the project (admin privileges are required because a virtual directory is used).
-- Update configuration of the storage: Select the Azure Storage > Manage Access Keys (copy paste into the config)
-- Start ngrok in a command shell: "ngrok 80" and copy the url which forwards to 127.0.0.1:80.
-- go to the [Photon Dashboard](https://dev-cloud.exitgames.com/en/Turnbased/Dashboard), create an application and set in the Webhooks tab the BaseUrl value: [url from ngrok]/turnbased/[your app id]/.
+- *Option 1: Azure Storage*, web.config `<add key="DataAccess" value="Azure"/>`
+  - Select the Azure Storage > Manage Access Keys (copy paste into the config)
+  - set `<add key="AzureAccountName" value="" />`
+  - set `<add key="AzureAccountKey" value="" />`
+- *Option 2: local Redis*, web.config `<add key="DataAccess" value="Redis"/>`
+  - set `<add key="RedisPassword" value=""/>`
+  - set `<add key="RedisUrl" value="127.0.0.1"/>`
+  - Start local redis server
+- Start ngrok in a command shell: `ngrok 80` and copy the url which forwards to 127.0.0.1:80.
+- go to the [Photon Dashboard](https://www.exitgames.com/en/Turnbased/Dashboard), create an application and set in the Webhooks tab the BaseUrl value: `[url from ngrok]/turnbased/[your app id]/`.
 - run the client demo
 - check the requests and responses in your browser at [127.0.0.1:4040](http://127.0.0.1:4040)
 
