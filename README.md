@@ -3,20 +3,21 @@
 
 ## Summary ##
 
-This is the **Photon Turnbased Webhooks** sample using **Azure Websites** and **Redis**.
+This is the **Photon Turnbased Webhooks** sample using [Azure Websites]() and [Blob Storage]() and [Table Storage]() for persitence.
 
 ## Requirements ##
 
-- [Photon Developer account](https://dev-cloud.exitgames.com/)
-- Windows with Internet Information Service feature enabled
+- [Photon Account for Turnbased](https://www.exitgames.com/en/Turnbased)
+- Windows with IIS (Internet Information Service) feature enabled
 - Visual Studio 2013
-- [Redis for Windows](https://github.com/MSOpenTech/redis)
+- Azure Account: It is free (but you need to enter a Credit Card)
+- Azure Storage: Create a "STORAGE" > Quick Create (enter Name and Region)
 - [ngrok](https://ngrok.com/) to forward requests to your PC
 
 ## How to run locally ##
 
 - Open the sample running Visual Studio as administrator and build the project (admin privileges are required because a virtual directory is used).
-- Install redis and start it if it didn't start automatically. 
+- Update configuration of the storage: Select the Azure Storage > Manage Access Keys (copy paste into the config)
 - Start ngrok in a command shell: "ngrok 80" and copy the url which forwards to 127.0.0.1:80.
 - go to the [Photon Dashboard](https://dev-cloud.exitgames.com/en/Turnbased/Dashboard), create an application and set in the Webhooks tab the BaseUrl value: [url from ngrok]/turnbased/[your app id]/.
 - run the client demo
