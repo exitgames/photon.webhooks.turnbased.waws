@@ -55,7 +55,7 @@ namespace Photon.Webhooks.Turnbased
 
                 DataAccess = new Redis();
             }
-            if (ConfigurationManager.AppSettings["DataAccess"].Equals("Amazon", StringComparison.OrdinalIgnoreCase))
+            else if (ConfigurationManager.AppSettings["DataAccess"].Equals("Amazon", StringComparison.OrdinalIgnoreCase))
             {
                 var regionEndpoint = RegionEndpoint.GetBySystemName(ConfigurationManager.AppSettings["AWSRegion"]);
                 AmazonS3Client = new AmazonS3Client(ConfigurationManager.AppSettings["AWSAccessKey"], ConfigurationManager.AppSettings["AWSSecretKey"], regionEndpoint);
