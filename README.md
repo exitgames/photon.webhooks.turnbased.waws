@@ -2,7 +2,7 @@
 
 ## Summary ##
 
-This is the **Photon Turnbased Webhooks** sample using [Azure Websites]() and [Blob Storage]() and [Table Storage]() for persitence.
+This is the **Photon Turnbased Webhooks** sample using [Azure Websites](http://www.windowsazure.com/en-us/services/storage/) and [Blob Storage]() and [Table Storage](http://www.windowsazure.com/en-us/services/storage/) for persitence.
 
 ## Requirements ##
 
