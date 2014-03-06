@@ -1,5 +1,4 @@
 # Photon Turnbased Webhooks Sample #
-----------
 
 ## Summary ##
 
