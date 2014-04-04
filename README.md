@@ -23,7 +23,19 @@ This is the **Photon Turnbased Webhooks** sample using [Azure Websites](http://w
 - local [Redis](http://redis.io/download)
 
 
-## How to run locally
+## Set this project up for free now! Check out all the possibilities of Microsoft Azure!
+
+Sign up for your free trial month of Microsoft Azure now and get USD 200 / EURO 150 to spend on all(!) Azure services you like to try out – without any further obligation!  
+You’ll get the full power from the Cloud and you can choose yourself, how to spend your balance!
+
+**[http://aka.ms/exitgames_azure](http://aka.ms/exitgames_azure)**
+ 
+For authentification purposes you’ll need a credit card to sign up.
+Without a credit card request a free Microsoft Azure Pass simply by sending a short note to [azurenow@microsoft.com](azurenow@microsoft.com).
+Use the Microsoft Azure Pass to sign up at [www.windowsazurepass.com](www.windowsazurepass.com) and you’ll also discover the cloud power of Microsoft Azure for free!
+
+
+## Run it locally
 
 - Open the sample running Visual Studio as administrator and build the project (admin privileges are required because a virtual directory is used).
 - *Option 1: Azure Storage*, web.config `<add key="DataAccess" value="Azure"/>`
@@ -38,18 +50,6 @@ This is the **Photon Turnbased Webhooks** sample using [Azure Websites](http://w
 - go to the [Photon Dashboard](https://www.exitgames.com/en/Turnbased/Dashboard), create an application and set in the Webhooks tab the BaseUrl value: `[url from ngrok]/turnbased/[your app id]/`.
 - run the client demo
 - check the requests and responses in your browser at [127.0.0.1:4040](http://127.0.0.1:4040)
-
-
-## Set this project up for free now! Check out all the possibilities of Microsoft Azure!
-
-Sign up for your free trial month of Microsoft Azure now and get USD 200 / EURO 150 to spend on all(!) Azure services you like to try out – without any further obligation!  
-You’ll get the full power from the Cloud and you can choose yourself, how to spend your balance!
-
-**[http://aka.ms/exitgames_azure](http://aka.ms/exitgames_azure)**
- 
-For authentification purposes you’ll need a credit card to sign up.
-Without a credit card request a free Microsoft Azure Pass simply by sending a short note to [azurenow@microsoft.com](azurenow@microsoft.com).
-Use the Microsoft Azure Pass to sign up at [www.windowsazurepass.com](www.windowsazurepass.com) and you’ll also discover the cloud power of Microsoft Azure for free!
 
 
 ## Next Steps ##
