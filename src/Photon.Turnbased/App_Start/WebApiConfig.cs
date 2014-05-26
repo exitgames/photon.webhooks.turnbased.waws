@@ -7,6 +7,15 @@
 namespace Photon.Webhooks.Turnbased
 {
     using System.Web.Http;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http.Filters;
+
+    using Models;
+
+    using log4net;
+
+    using Newtonsoft.Json;
 
     public static class WebApiConfig
     {
@@ -14,6 +23,10 @@ namespace Photon.Webhooks.Turnbased
 
         public static void Register(HttpConfiguration config)
         {
+            log4net.Config.XmlConfigurator.Configure();
+
+            config.Filters.Add(new UnhandledExceptionAttribute());
+
             // Web API configuration and services
 
             // Web API routes
@@ -28,5 +41,21 @@ namespace Photon.Webhooks.Turnbased
         }
 
         #endregion
+    }
+
+
+    public class UnhandledExceptionAttribute : ExceptionFilterAttribute
+    {
+        private static readonly ILog log = log4net.LogManager.GetLogger("MyLogger");
+
+        public override void OnException(HttpActionExecutedContext context)
+        {
+            log.Error(context.Exception);
+
+            var response = new ErrorResponse {Message = context.Exception.Message};
+            if(log.IsDebugEnabled) log.Debug(JsonConvert.SerializeObject(response));
+
+            context.Response = context.Request.CreateResponse(HttpStatusCode.OK, response);
+        }
     }
 }

@@ -30,6 +30,8 @@ namespace Photon.Webhooks.Turnbased.Models
         /// </summary>
         public dynamic State2 { get; set; }
 
+        public string Type { get; set; }
+
         #endregion
     }
 
@@ -37,9 +39,18 @@ namespace Photon.Webhooks.Turnbased.Models
     {
         #region Public Properties
 
+        [DefaultValue(-1)]
+        public int ActorNr { get; set; }
+
         public string GameId { get; set; }
 
         public string UserId { get; set; }
+
+        public dynamic CreateOptions { get; set; }
+
+        public bool CreateIfNotExists { get; set; }
+
+        public string Type { get; set; }
 
         #endregion
     }
@@ -61,6 +72,8 @@ namespace Photon.Webhooks.Turnbased.Models
         public bool IsInactive { get; set; }
 
         public string UserId { get; set; }
+
+        public string Type { get; set; }
         
         #endregion
     }
@@ -79,11 +92,50 @@ namespace Photon.Webhooks.Turnbased.Models
         #endregion
     }
 
+    public class GamePropertiesRequest
+    {
+        #region Public Properties
+
+        [DefaultValue(-1)]
+        public int ActorNr { get; set; }
+
+        public string GameId { get; set; }
+
+        public dynamic State { get; set; }
+
+        public Dictionary<string, object> Properties { get; set; }
+
+        public string Type { get; set; }
+
+        public string UserId { get; set; }
+
+        public string Username { get; set; }
+        #endregion
+    }
+
     public class GetGameListRequest
     {
         #region Public Properties
 
         public string UserId { get; set; }
+
+        #endregion
+    }
+
+    public class GameEventRequest
+    {
+        #region Public Properties
+
+        [DefaultValue(-1)]
+        public int ActorNr { get; set; }
+
+        public string GameId { get; set; }
+
+        public dynamic Data { get; set; }
+
+        public dynamic State { get; set; }
+
+        public string Type { get; set; }
 
         #endregion
     }
@@ -98,7 +150,10 @@ namespace Photon.Webhooks.Turnbased.Models
 
         public string Message { get; set; }
 
-        public int ResultCode = (int)Models.ResultCode.Failed;
+        public int ResultCode
+        {
+            get { return (int)Models.ResultCode.Failed; }
+        }
 
         #endregion
     }
@@ -107,7 +162,10 @@ namespace Photon.Webhooks.Turnbased.Models
     {
         #region Public Properties
 
-        public int ResultCode = (int) Models.ResultCode.Ok;
+        public int ResultCode
+        {
+            get { return (int)Models.ResultCode.Ok; }
+        }
 
         /// <summary>
         /// the game state as saved at game close 
@@ -124,9 +182,12 @@ namespace Photon.Webhooks.Turnbased.Models
         /// <summary>
         /// the list of open games for this user, containing key/value pairs with game name/actor number
         /// </summary>
-        public Dictionary<string, string> Data { get; set; }
+        public Dictionary<string, object> Data { get; set; }
 
-        public int ResultCode { get; set; }
+        public int ResultCode
+        {
+            get { return (int)Models.ResultCode.Ok; }
+        }
 
         #endregion
     }
@@ -135,10 +196,13 @@ namespace Photon.Webhooks.Turnbased.Models
     {
         #region Public Properties
 
-        public int ResultCode = (int)Models.ResultCode.Ok;
+        public int ResultCode
+        {
+            get { return (int) Models.ResultCode.Ok; }
+        }
 
         #endregion
-    }
+        }
 
     #endregion
 

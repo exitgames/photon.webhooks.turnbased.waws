@@ -9,11 +9,16 @@ namespace Photon.Webhooks.Turnbased.DataAccess
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Table;
 
+    using log4net;
+
     public class Azure : IDataAccess
     {
+        private static readonly ILog log = log4net.LogManager.GetLogger("MyLogger");
+
         public bool StateExists(string appId, string key)
         {
             // Create the blob client.
@@ -71,7 +76,16 @@ namespace Photon.Webhooks.Turnbased.DataAccess
 
             var blockBlob = container.GetBlockBlobReference(key);
 
-            return blockBlob.DownloadText();
+            try
+            {
+                return blockBlob.DownloadText();
+            }
+            //Azure throws exception if file not found
+            catch (StorageException)
+            {
+                if (log.IsDebugEnabled) log.DebugFormat("StateGet, state {0}/{1} not found", appId, key);
+                return null;
+            }
         }
 
         public void StateDelete(string appId, string key)
@@ -88,7 +102,15 @@ namespace Photon.Webhooks.Turnbased.DataAccess
 
             var blockBlob = container.GetBlockBlobReference(key);
 
-            blockBlob.Delete();
+            try
+            {
+                blockBlob.Delete();
+            }
+            //Azure throws exception if file not found
+            catch (StorageException)
+            {
+                if (log.IsDebugEnabled) log.DebugFormat("StateDelete, state {0}/{1} not found", appId, key);
+            }
         }
 
         public void GameInsert(string appId, string key, string gameId, int actorNr)
@@ -116,7 +138,14 @@ namespace Photon.Webhooks.Turnbased.DataAccess
             //create for demo - this call is obsolete if table is already created manually in Azure 
             table.CreateIfNotExists();
 
-            table.Execute(TableOperation.Delete(new TableEntity { PartitionKey = key, RowKey = gameId, ETag = "*" }));
+            try
+            {
+                table.Execute(TableOperation.Delete(new TableEntity { PartitionKey = key, RowKey = gameId, ETag = "*" }));
+            }
+            catch (StorageException)
+            {
+                if (log.IsDebugEnabled) log.DebugFormat("GameDelete, game {0}/{1}/{2} not found", appId, key, gameId);
+            }
         }
 
         public Dictionary<string, string> GameGetAll(string appId, string key)

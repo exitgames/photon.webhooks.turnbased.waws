@@ -11,6 +11,7 @@ namespace Photon.Webhooks.Turnbased.DataAccess
     using System.IO;
     using System.Linq;
 
+    using Amazon.S3;
     using Amazon.S3.Model;
     using Amazon.DynamoDBv2.Model;
     
@@ -53,12 +54,20 @@ namespace Photon.Webhooks.Turnbased.DataAccess
                 Key = string.Format("{0}/{1}", appId, key),
             };
 
-            using (var response = WebApiApplication.AmazonS3Client.GetObject(getObjectRequest))
+            try
             {
-                using (var reader = new StreamReader(response.ResponseStream))
+                using (var response = WebApiApplication.AmazonS3Client.GetObject(getObjectRequest))
                 {
-                    return reader.ReadToEnd();
+                    using (var reader = new StreamReader(response.ResponseStream))
+                    {
+                        return reader.ReadToEnd();
+                    }
                 }
+            }
+            //Amazon throws exception if file not found
+            catch (AmazonS3Exception)
+            {
+                return null;
             }
         }
 
