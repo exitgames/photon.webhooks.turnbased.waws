@@ -25,7 +25,7 @@ namespace Photon.Webhooks.Turnbased.Controllers
 
         public dynamic Post(GetGameListRequest request, string appId)
         {
-            if (log.IsDebugEnabled) log.DebugFormat("{0} - {1}", Request.RequestUri, JsonConvert.SerializeObject(request));
+            appId = appId.ToLowerInvariant();
 
             string message;
             if (!IsValid(request, out message))
@@ -34,6 +34,8 @@ namespace Photon.Webhooks.Turnbased.Controllers
                 if (log.IsDebugEnabled) log.Debug(JsonConvert.SerializeObject(errorResponse));
                 return errorResponse;
             }
+
+            if (log.IsDebugEnabled) log.DebugFormat("{0} - {1}", Request.RequestUri, JsonConvert.SerializeObject(request));
 
             var list = new Dictionary<string, object>();
 
@@ -69,6 +71,12 @@ namespace Photon.Webhooks.Turnbased.Controllers
 
         private static bool IsValid(GetGameListRequest request, out string message)
         {
+            if (request == null)
+            {
+                message = "Request data is missing.";
+                return false;
+            }
+
             if (string.IsNullOrEmpty(request.UserId))
             {
                 message = "Missing UserId.";

@@ -20,7 +20,7 @@ namespace Photon.Webhooks.Turnbased.Controllers
 
         public dynamic Post(GameLeaveRequest request, string appId)
         {
-            if (log.IsDebugEnabled) log.DebugFormat("{0} - {1}", Request.RequestUri, JsonConvert.SerializeObject(request));
+            if (log.IsDebugEnabled) log.DebugFormat("{0} - {1}", Request.RequestUri, request == null ? "null" : JsonConvert.SerializeObject(request));
 
             var response = new OkResponse();
             if (log.IsDebugEnabled) log.Debug(JsonConvert.SerializeObject(response));

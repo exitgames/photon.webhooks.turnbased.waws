@@ -33,7 +33,7 @@ namespace Photon.Webhooks.Turnbased.Controllers
 
         public dynamic Post(GamePropertiesRequest request, string appId)
         {
-            if (log.IsDebugEnabled) log.DebugFormat("{0} - {1}", Request.RequestUri, JsonConvert.SerializeObject(request));
+            appId = appId.ToLowerInvariant();
 
             string message;
             if (!IsValid(request, out message))
@@ -42,6 +42,8 @@ namespace Photon.Webhooks.Turnbased.Controllers
                 if (log.IsDebugEnabled) log.Debug(JsonConvert.SerializeObject(errorResponse));
                 return errorResponse;
             }
+
+            if (log.IsDebugEnabled) log.DebugFormat("{0} - {1}", Request.RequestUri, JsonConvert.SerializeObject(request));
 
             if (request.State != null)
             {
@@ -86,6 +88,12 @@ namespace Photon.Webhooks.Turnbased.Controllers
 
         private static bool IsValid(GamePropertiesRequest request, out string message)
         {
+            if (request == null)
+            {
+                message = "Request data is missing.";
+                return false;
+            }
+
             if (string.IsNullOrEmpty(request.GameId))
             {
                 message = "Missing GameId.";
