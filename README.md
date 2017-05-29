@@ -7,9 +7,9 @@ This is the **Photon Turnbased Webhooks** sample using [Azure Websites](http://w
 
 ## Requirements
 
-- [Photon Account for Turnbased](https://www.exitgames.com/en/Turnbased)
+- [Photon Account](https://www.photonengine.com)
 - Windows with IIS (Internet Information Service) feature enabled
-- Visual Studio 2013
+- Visual Studio 2013 or up
 - [ngrok](https://ngrok.com/) to forward requests to your PC
 
 
@@ -47,7 +47,7 @@ Use the Microsoft Azure Pass to sign up at [www.windowsazurepass.com](www.window
   - set `<add key="RedisUrl" value="127.0.0.1"/>`
   - Start local redis server
 - Start ngrok in a command shell: `ngrok http 80` and copy the url which forwards to 127.0.0.1:80.
-- go to the [Photon Dashboard](https://www.exitgames.com/en/Turnbased/Dashboard), create an application and set in the Webhooks tab the BaseUrl value: `[url from ngrok]/turnbased/[your app id]/`.
+- go to the [Photon Dashboard](https://www.photonengine.com/Dashboard), create an application and set in the Webhooks tab the BaseUrl value: `[url from ngrok]/turnbased/[your app id]/`.
 - run the client demo
 - check the requests and responses in your browser at [127.0.0.1:4040](http://127.0.0.1:4040)
 
