@@ -47,7 +47,7 @@ Use the Microsoft Azure Pass to sign up at [www.windowsazurepass.com](www.window
   - set `<add key="RedisUrl" value="127.0.0.1"/>`
   - Start local redis server
 - Start ngrok in a command shell: `ngrok http 80` and copy the url which forwards to 127.0.0.1:80. (change port 80 to the listening port of your web server e.g. 5000 or else)
-- go to the [Photon Dashboard](https://www.photonengine.com/Dashboard), create an application and set in the Webhooks tab the BaseUrl value: `[url from ngrok]/{AppId}`.
+- go to the [Photon Dashboard]( https://dashboard.photonengine.com), create an application and set in the Webhooks tab the BaseUrl value: `[url from ngrok]/{AppId}`.
 - run the client demo
 - check the requests and responses in your browser at [127.0.0.1:4040](http://127.0.0.1:4040)
 
